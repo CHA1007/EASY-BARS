@@ -11,10 +11,10 @@ public class HealthBarRenderer {
     private static final int BAR_SPACING = 2; // 血条和盔甲条之间的间距
     private static final int BACKGROUND_COLOR = 0x4F000000; // 半透明黑色
     private static final int BORDER_COLOR = 0xFF404040; // 深灰色边框
-    private static final int HEALTH_COLOR_HIGH = 0xFF00FF00; // 绿色（高血量）
-    private static final int HEALTH_COLOR_MEDIUM = 0xFFFFFF00; // 黄色（中等血量）
-    private static final int HEALTH_COLOR_LOW = 0xFFFF0000; // 红色（低血量）
-    private static final int ARMOR_COLOR = 0xFF00BFFF; // 深天蓝色（盔甲）
+    private static final int HEALTH_COLOR_HIGH = 0xFF00FF7F; // 翠绿色（高血量）
+    private static final int HEALTH_COLOR_MEDIUM = 0xFFFFD700; // 金色（中等血量）
+    private static final int HEALTH_COLOR_LOW = 0xFFFF4500; // 橙红色（低血量）
+    private static final int ARMOR_COLOR = 0xFF4169E1; // 皇家蓝（盔甲）
     private static final int SHADOW_COLOR = 0x40000000; // 半透明黑色阴影
     private static final int HIGHLIGHT_COLOR = 0x33FFFFFF; // 高光效果
 
@@ -37,6 +37,13 @@ public class HealthBarRenderer {
         
         // 只在有盔甲值或玩家在创造模式下显示盔甲条
         if (armor > 0 || player.getAbilities().invulnerable) {
+            // 绘制盔甲文本（百分比格式）
+            String armorText = String.format("%.0f%%", armorPercentage * 100);
+            // 绘制阴影
+            guiGraphics.drawString(minecraft.font, armorText, x - 19, y - BAR_HEIGHT - BAR_SPACING - 2, SHADOW_COLOR, false);
+            // 绘制文本
+            guiGraphics.drawString(minecraft.font, armorText, x - 20, y - BAR_HEIGHT - BAR_SPACING -1, ARMOR_COLOR, false);
+            
             renderBar(guiGraphics, x, y - BAR_HEIGHT - BAR_SPACING, armorPercentage, ARMOR_COLOR, "护甲");
         }
         
@@ -62,7 +69,7 @@ public class HealthBarRenderer {
         int fillWidth = (int) (BAR_WIDTH * percentage);
         for (int i = 0; i < fillWidth; i++) {
             float segmentPercentage = (float) i / fillWidth;
-            int segmentColor = interpolateColor(color, 0xFFFFFFFF, segmentPercentage * 0.5f);
+            int segmentColor = interpolateColor(color, 0xFFFFFFFF, segmentPercentage * 0.3f);
             guiGraphics.fill(x + i, y, x + i + 1, y + BAR_HEIGHT, segmentColor);
         }
         
