@@ -16,6 +16,7 @@ public class HealthBarRenderer {
     private static final int HEALTH_COLOR_LOW = 0xFFFF0000; // 红色（低血量）
     private static final int ARMOR_COLOR = 0xFF00BFFF; // 深天蓝色（盔甲）
     private static final int SHADOW_COLOR = 0x40000000; // 半透明黑色阴影
+    private static final int HIGHLIGHT_COLOR = 0x33FFFFFF; // 高光效果
 
     public static void renderHealthBar(PoseStack poseStack, int x, int y, Player player) {
         Minecraft minecraft = Minecraft.getInstance();
@@ -42,9 +43,9 @@ public class HealthBarRenderer {
         // 绘制血量文本（百分比格式）
         String healthText = String.format("%.0f%%", healthPercentage * 100);
         // 绘制阴影
-        guiGraphics.drawString(minecraft.font, healthText, x - 29, y + 1, SHADOW_COLOR, false);
+        guiGraphics.drawString(minecraft.font, healthText, x - 19, y + 1, SHADOW_COLOR, false);
         // 绘制文本
-        guiGraphics.drawString(minecraft.font, healthText, x - 30, y, healthColor, false);
+        guiGraphics.drawString(minecraft.font, healthText, x - 20, y, healthColor, false);
         
         // 绘制血条
         renderBar(guiGraphics, x, y + 2, healthPercentage, healthColor, "生命");
@@ -61,9 +62,12 @@ public class HealthBarRenderer {
         int fillWidth = (int) (BAR_WIDTH * percentage);
         for (int i = 0; i < fillWidth; i++) {
             float segmentPercentage = (float) i / fillWidth;
-            int segmentColor = interpolateColor(color, 0xFFFFFFFF, segmentPercentage);
+            int segmentColor = interpolateColor(color, 0xFFFFFFFF, segmentPercentage * 0.5f);
             guiGraphics.fill(x + i, y, x + i + 1, y + BAR_HEIGHT, segmentColor);
         }
+        
+        // 添加高光效果
+        guiGraphics.fill(x, y, x + BAR_WIDTH, y + 1, HIGHLIGHT_COLOR);
     }
 
     private static int getHealthColor(float percentage) {

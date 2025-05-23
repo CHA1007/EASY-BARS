@@ -25,7 +25,7 @@ public class HealthBarEventHandler {
                 int screenWidth = minecraft.getWindow().getGuiScaledWidth();
                 int screenHeight = minecraft.getWindow().getGuiScaledHeight();
                 int x = (screenWidth - 182) / 2;
-                int y = screenHeight - 37; // 原来是35，现在改为37，向上移动2像素
+                int y = screenHeight - 39; // 原来是35，现在改为37，向上移动2像素
 
                 HealthBarRenderer.renderHealthBar(
                     event.getGuiGraphics().pose(),
