@@ -34,7 +34,8 @@ public class HealthBarEventHandler {
         // 取消原版血条和护甲条的渲染
         if (event.getOverlay() == VanillaGuiOverlay.PLAYER_HEALTH.type() ||
             event.getOverlay() == VanillaGuiOverlay.ARMOR_LEVEL.type() ||
-            event.getOverlay() == VanillaGuiOverlay.FOOD_LEVEL.type()) {
+            event.getOverlay() == VanillaGuiOverlay.FOOD_LEVEL.type() ||
+            event.getOverlay() == VanillaGuiOverlay.AIR_LEVEL.type()) {
             event.setCanceled(true);
         }
 
