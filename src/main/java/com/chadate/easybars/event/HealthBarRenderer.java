@@ -11,7 +11,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 public class HealthBarRenderer {
     private static final int INVENTORY_WIDTH = 182; // 物品栏宽度
     private static final int BAR_HEIGHT = 5;
-    private static final int ARMOR_BAR_HEIGHT = 4; // 盔甲条高度
+    private static final int ARMOR_BAR_HEIGHT = 5; // 盔甲条高度
     private static final int BAR_SPACING = 4; // 血条和盔甲条之间的间距
     private static final int HORIZONTAL_SPACING = 8; // 水平间距
     private static final int BACKGROUND_COLOR = 0x4F000000; // 半透明黑色
@@ -86,6 +86,10 @@ public class HealthBarRenderer {
         float armorPercentage = armor / 20.0f; // 假设最大盔甲值为20
         float toughnessPercentage = armorToughness / 20.0f; // 假设最大韧性值为20
         
+        // 绘制背景和边框
+        guiGraphics.fill(x - 1, armorY - 1, x + barWidth + 1, armorY + ARMOR_BAR_HEIGHT + 1, BORDER_COLOR);
+        guiGraphics.fill(x, armorY, x + barWidth, armorY + ARMOR_BAR_HEIGHT, BACKGROUND_COLOR);
+        
         // 只有当盔甲值大于0时才绘制盔甲值条
         if (armor > 0) {
             renderArmorBar(guiGraphics, x, armorY, armorPercentage, ARMOR_COLOR, "护甲", barWidth, true);
@@ -93,11 +97,6 @@ public class HealthBarRenderer {
         
         // 只有当韧性值大于0时才绘制韧性条
         if (armorToughness > 0) {
-            // 如果盔甲值为0，需要先绘制背景
-            if (armor <= 0) {
-                guiGraphics.fill(x - 1, y - 1, x + barWidth + 1, y + ARMOR_BAR_HEIGHT + 1, BORDER_COLOR);
-                guiGraphics.fill(x, y, x + barWidth, y + ARMOR_BAR_HEIGHT, BACKGROUND_COLOR);
-            }
             renderArmorBar(guiGraphics, x, armorY, toughnessPercentage, ARMOR_TOUGHNESS_COLOR, "韧性", barWidth, true);
         }
         
@@ -108,7 +107,8 @@ public class HealthBarRenderer {
             
             // 计算文本位置，右对齐到盔甲条左边，垂直居中
             int textX = x - TEXT_PADDING - textWidth + 2;
-            int textY = armorY + (ARMOR_BAR_HEIGHT - minecraft.font.lineHeight) / 2 + HudBarConfig.ARMOR_TEXT_Y_OFFSET.get();
+            // 计算文本垂直居中位置，考虑文本缩放
+            int textY = armorY + (ARMOR_BAR_HEIGHT - (int)(minecraft.font.lineHeight * TEXT_SCALE)) / 2 + HudBarConfig.ARMOR_TEXT_Y_OFFSET.get() - 1;
             
             // 使用新的文本渲染工具类渲染带缩放的文本
             TextRenderHelper.renderScaledTextWithShadow(
